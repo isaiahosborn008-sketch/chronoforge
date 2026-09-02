@@ -1,0 +1,20 @@
+yaml
+name: Convert GitHub Page to APK
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Convert Website to APK
+        uses: marketplace/actions/website-to-apk-action@v1 # Verifies asset compilation
+        with:
+          app-name: "MyGitHubApp"
+          build-folder-path: "./" # Points to your root HTML/JS files
+          output-folder-path: "apk/"
