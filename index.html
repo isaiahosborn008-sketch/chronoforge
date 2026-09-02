@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0c0f12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>ChronoForge</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ============ TOP BAR ============ -->
+  <header id="topbar">
+    <div class="brand">
+      <svg class="brand-gear" viewBox="0 0 100 100" aria-hidden="true">
+        <use href="#gear-shape"></use>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">ChronoForge</span>
+        <span class="brand-sub">Project &amp; Time Works</span>
+      </div>
+    </div>
+
+    <nav id="view-tabs">
+      <button class="tab-btn active" data-view="planner">
+        <svg viewBox="0 0 24 24" class="tab-icon"><use href="#icon-clock"></use></svg>
+        <span>Day Planner</span>
+      </button>
+      <button class="tab-btn" data-view="projects">
+        <svg viewBox="0 0 24 24" class="tab-icon"><use href="#icon-cog"></use></svg>
+        <span>Projects</span>
+      </button>
+    </nav>
+
+    <div class="topbar-right">
+      <div class="led-clock" id="live-clock">--:--</div>
+      <button id="settings-btn" class="icon-btn" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" class="tab-icon"><use href="#icon-gear-small"></use></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ PLANNER VIEW ============ -->
+  <main id="view-planner" class="view active">
+    <div class="planner-grid">
+
+      <section class="timeline-panel">
+        <div class="timeline-toolbar">
+          <button id="day-prev" class="nav-arrow" aria-label="Previous day">&#10094;</button>
+          <div class="day-title">
+            <span id="day-title-main">Today</span>
+            <span id="day-title-date">—</span>
+          </div>
+          <button id="day-next" class="nav-arrow" aria-label="Next day">&#10095;</button>
+          <button id="day-today" class="ghost-btn">Today</button>
+
+          <div class="week-strip" id="week-strip"><!-- 7 day chips injected --></div>
+        </div>
+
+        <div class="timeline-scroll" id="timeline-scroll">
+          <div class="timeline" id="timeline">
+            <!-- hour rows + blocks injected by JS -->
+          </div>
+        </div>
+      </section>
+
+      <aside class="tray-panel">
+
+        <div class="tray-section priority-section">
+          <div class="tray-section-head">
+            <svg viewBox="0 0 24 24" class="tray-icon"><use href="#icon-bolt"></use></svg>
+            <h2>Top Priority</h2>
+          </div>
+          <div id="priority-list" class="priority-list"><!-- injected --></div>
+        </div>
+
+        <div class="tray-section">
+          <div class="tray-section-head">
+            <svg viewBox="0 0 24 24" class="tray-icon"><use href="#icon-tray"></use></svg>
+            <h2>Unscheduled Items</h2>
+            <button id="quick-add-toggle" class="mini-add-btn" aria-label="Add item">+</button>
+          </div>
+
+          <form id="quick-add-form" class="quick-add-form hidden">
+            <input type="text" id="qa-title" placeholder="Item name" required>
+            <div class="qa-row">
+              <input type="number" id="qa-duration" placeholder="Duration (min)" min="5" step="5" value="30" required>
+              <select id="qa-project">
+                <option value="">No project</option>
+              </select>
+            </div>
+            <div class="qa-row">
+              <button type="submit" class="forge-btn small">Add to Tray</button>
+              <button type="button" id="qa-cancel" class="ghost-btn small">Cancel</button>
+            </div>
+          </form>
+
+          <div id="tray-list" class="tray-list"><!-- draggable cards injected --></div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+
+  <!-- ============ PROJECTS VIEW ============ -->
+  <main id="view-projects" class="view">
+    <div class="projects-toolbar">
+      <div class="folder-tabs" id="folder-tabs"><!-- All / Personal / School / + injected --></div>
+      <div class="projects-toolbar-actions">
+        <button id="manage-folders-btn" class="ghost-btn">Manage Folders</button>
+        <button id="new-project-btn" class="forge-btn">+ New Project</button>
+      </div>
+    </div>
+
+    <div class="projects-grid" id="projects-grid"><!-- project cards injected --></div>
+  </main>
+
+</div>
+
+<!-- ============ MODAL ROOT ============ -->
+<div id="modal-backdrop" class="modal-backdrop hidden">
+  <div id="modal-root" class="modal-root"></div>
+</div>
+
+<!-- ============ DRAG GHOST ============ -->
+<div id="drag-ghost" class="drag-ghost hidden"></div>
+
+<!-- ============ SVG SPRITE (icons) ============ -->
+<svg style="display:none">
+  <defs>
+    <g id="gear-shape">
+      <path d="M50 8 L58 8 L61 20 L71 24 L81 16 L88 23 L80 33 L84 43 L96 46 L96 54 L84 57 L80 67 L88 77 L81 84 L71 76 L61 80 L58 92 L50 92 L42 92 L39 80 L29 76 L19 84 L12 77 L20 67 L16 57 L4 54 L4 46 L16 43 L20 33 L12 23 L19 16 L29 24 L39 20 Z" />
+      <circle cx="50" cy="50" r="16" class="gear-hole"/>
+    </g>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="icon-cog" viewBox="0 0 24 24"><path fill="currentColor" d="M12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5ZM19.4 13a7.4 7.4 0 0 0 .06-1 7.4 7.4 0 0 0-.06-1l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L14.9 3h-3.8l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h3.8l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6Z"/></symbol>
+    <symbol id="icon-gear-small" viewBox="0 0 24 24"><path fill="currentColor" d="M12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5ZM19.4 13a7.4 7.4 0 0 0 .06-1 7.4 7.4 0 0 0-.06-1l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L14.9 3h-3.8l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h3.8l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6Z"/></symbol>
+    <symbol id="icon-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+    <symbol id="icon-tray" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M3 13h4l2 3h6l2-3h4M4 13 6 5h12l2 8M4 13v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12l5 5L20 6"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M9 7V4h6v3m-8 0 1 13h10l1-13"/></symbol>
+    <symbol id="icon-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm0 7.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3ZM9 21a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm6-15a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm0 7.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm0 7.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 5h16v15H4zM4 9h16M8 3v4M16 3v4"/></symbol>
+  </defs>
+</svg>
+
+<script src="app.js"></script>
+</body>
+</html>
