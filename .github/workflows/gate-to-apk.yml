@@ -1,4 +1,3 @@
-yaml
 name: Convert GitHub Page to APK
 on:
   push:
@@ -18,3 +17,4 @@ jobs:
           app-name: "MyGitHubApp"
           build-folder-path: "./" # Points to your root HTML/JS files
           output-folder-path: "apk/"
+
